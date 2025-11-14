@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Color Explorer | سمارت كيدز</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="تعلم أسماء الألوان باللغة الإنجليزية عبر بطاقات تفاعلية وصوت واضح لكل كلمة." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* أنماط التصميم الرئيسي من index.html */
+    :root {
+      --primary: #FF9E1F;
+      --primary-dark: #E88A0D;
+      --primary-light: #FFD699;
+      --secondary: #4A90E2;
+      --secondary-light: #8EC0F0;
+      --accent: #FF6B6B;
+      --dark: #2D3748;
+      --light: #F7FAFC;
+      --white: #FFFFFF;
+      --gray-light: #E2E8F0;
+      --gray: #A0AEC0;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
+      --radius: 16px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background: var(--white);
+      border-radius: var(--radius);
+      margin: 1rem auto;
+      max-width: min(1200px, 94vw);
+      box-shadow: var(--shadow);
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 10px;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 700;
+      font-size: 1.4rem;
+    }
+
+    .brand span:first-child {
+      font-size: 2rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: var(--transition);
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    main {
+      max-width: min(1200px, 94vw);
+      margin: 0 auto;
+      padding: 1.5rem 0;
+      flex: 1;
+    }
+
+    section {
+      margin-bottom: 4rem;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-heading h2 {
+      font-size: 2.2rem;
+      margin: 1rem 0;
+      color: var(--dark);
+    }
+
+    .section-heading p {
+      max-width: 700px;
+      margin: 0 auto;
+      color: var(--dark);
+      opacity: 0.8;
+      font-size: 1.1rem;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      align-self: flex-start;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--primary);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(255, 158, 31, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(255, 158, 31, 0.4);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--primary);
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: var(--transition);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+    }
+
+    .value-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .value-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .value-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .value-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(to left, var(--primary), var(--secondary));
+    }
+
+    .value-card .emoji {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .value-card h3 {
+      margin: 0 0 1rem 0;
+      color: var(--dark);
+    }
+
+    .value-card p {
+      color: var(--dark);
+      opacity: 0.8;
+      margin: 0 0 1.5rem 0;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--dark);
+      opacity: 0.7;
+      border-top: 1px solid var(--gray-light);
+      margin-top: 4rem;
+    }
+
+    /* أنماط خاصة بصفحة اللعبة */
+    .game-hero {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    @media (max-width: 768px) {
+      .game-hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .game-header {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-header::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(255, 158, 31, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+      z-index: 0;
+    }
+
+    .game-header::after {
+      content: "";
+      position: absolute;
+      bottom: -30%;
+      left: -10%;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba(74, 144, 226, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+      z-index: 0;
+    }
+
+    .game-header > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .game-header h1 {
+      font-size: 2.5rem;
+      margin: 0;
+      color: var(--dark);
+      line-height: 1.3;
+    }
+
+    .game-header h1 span {
+      color: var(--primary);
+    }
+
+    .game-header p {
+      color: var(--dark);
+      opacity: 0.8;
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .game-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--light);
+      padding: 0.8rem;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+
+    .game-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .game-sidebar {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .game-sidebar h2 {
+      margin: 0;
+      color: var(--dark);
+      text-align: center;
+    }
+
+    .game-progress {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .progress-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--gray-light);
+    }
+
+    .progress-item:last-child {
+      border-bottom: none;
+    }
+
+    .progress-item dt {
+      color: var(--dark);
+      opacity: 0.8;
+    }
+
+    .progress-item dd {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .card-note {
+      background: var(--light);
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      text-align: center;
+      color: var(--dark);
+      opacity: 0.8;
+    }
+
+    .game-instructions, .game-outcomes, .game-support {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+    }
+
+    .game-instructions h2, .game-outcomes h2, .game-support h2 {
+      margin: 0 0 1.5rem 0;
+      color: var(--dark);
+      text-align: center;
+    }
+
+    .game-instructions ol, .game-outcomes ul {
+      padding-right: 1.5rem;
+      margin: 0;
+    }
+
+    .game-instructions li, .game-outcomes li {
+      margin-bottom: 1rem;
+      color: var(--dark);
+      opacity: 0.8;
+    }
+
+    .game-support p {
+      color: var(--dark);
+      opacity: 0.8;
+      margin: 0;
+      text-align: center;
+    }
+
+    /* منطقة اللعبة التفاعلية */
+    .game-area {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+      display: none;
+    }
+
+    .game-area.active {
+      display: block;
+    }
+
+    .game-header-area {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .current-color {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--light);
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius);
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .color-sample {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 3px solid var(--white);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .color-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .sound-button {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 1.2rem;
+    }
+
+    .sound-button:hover {
+      background: var(--secondary-light);
+      transform: scale(1.05);
+    }
+
+    .game-stats {
+      display: flex;
+      gap: 1rem;
+      background: var(--light);
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius);
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--dark);
+      opacity: 0.7;
+    }
+
+    .color-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .color-card {
+      aspect-ratio: 1;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .color-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .color-card.correct {
+      animation: correctPulse 0.5s;
+    }
+
+    .color-card.incorrect {
+      animation: shake 0.5s;
+    }
+
+    @keyframes correctPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+
+    .color-label {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-weight: 700;
+      color: var(--dark);
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .color-card:hover .color-label {
+      opacity: 1;
+    }
+
+    .game-controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .completion-message {
+      text-align: center;
+      padding: 2rem;
+      background: var(--light);
+      border-radius: var(--radius);
+      margin-top: 2rem;
+      display: none;
+    }
+
+    .completion-message.active {
+      display: block;
+      animation: fadeIn 0.5s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .badge-earned {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff9e1f, #ff6b6b, #4a90e2);
+      color: white;
+      padding: 0.5rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 700;
+      margin: 1rem 0;
+      animation: rainbow 2s infinite;
+    }
+
+    @keyframes rainbow {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    /* زر المساعد الذكي */
+    .ai-assistant {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      z-index: 1000;
+    }
+
+    .ai-button {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border: none;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: white;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ai-button::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+      border-radius: 50%;
+    }
+
+    .ai-button:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .ai-button.pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(255, 158, 31, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 15px rgba(255, 158, 31, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 158, 31, 0);
+      }
+    }
+
+    .ai-tooltip {
+      position: absolute;
+      bottom: 85px;
+      left: 0;
+      background: var(--white);
+      color: var(--dark);
+      padding: 0.8rem 1.2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      width: 200px;
+      text-align: center;
+      font-weight: 500;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      transform: translateY(10px);
+    }
+
+    .ai-tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 10px solid transparent;
+      border-top-color: var(--white);
+    }
+
+    .ai-button:hover + .ai-tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    /* نافذة الدردشة */
+    .ai-chat {
+      position: fixed;
+      bottom: 120px;
+      left: 30px;
+      width: 350px;
+      height: 450px;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      z-index: 1001;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .ai-chat.active {
+      display: flex;
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chat-header h3 {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .close-chat {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .close-chat:hover {
+      transform: scale(1.2);
+    }
+
+    .chat-body {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 0.8rem 1rem;
+      border-radius: 1.2rem;
+      line-height: 1.5;
+    }
+
+    .ai-message {
+      background: var(--light);
+      color: var(--dark);
+      align-self: flex-start;
+      border-bottom-right-radius: 0.2rem;
+    }
+
+    .user-message {
+      background: var(--primary-light);
+      color: var(--dark);
+      align-self: flex-end;
+      border-bottom-left-radius: 0.2rem;
+    }
+
+    .chat-footer {
+      padding: 1rem;
+      border-top: 1px solid var(--gray-light);
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--gray-light);
+      border-radius: 50px;
+      font-family: inherit;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .chat-input:focus {
+      border-color: var(--primary);
+    }
+
+    .send-button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .send-button:hover {
+      background: var(--primary-dark);
+      transform: scale(1.05);
+    }
+
+    /* تحسينات للاستجابة */
+    @media (max-width: 1024px) {
+      .nav-links {
+        gap: 0.3rem;
+      }
+      
+      .nav-links a {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.85rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+      }
+      
+      .nav-links {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      
+      .nav-links a {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.7rem;
+      }
+      
+      .game-header h1 {
+        font-size: 2rem;
+      }
+      
+      .section-heading h2 {
+        font-size: 1.8rem;
+      }
+      
+      .game-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn-primary, .btn-secondary {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .game-header-area {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .current-color, .game-stats {
+        width: 100%;
+      }
+      
+      .color-cards {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      }
+      
+      .ai-chat {
+        width: 300px;
+        height: 400px;
+        left: 20px;
+        bottom: 110px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .nav-links {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .nav-links a {
+        width: 100%;
+        text-align: center;
+      }
+      
+      .ai-assistant {
+        bottom: 20px;
+        left: 20px;
+      }
+      
+      .ai-button {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+      }
+      
+      .ai-chat {
+        width: calc(100vw - 40px);
+        left: 20px;
+        right: 20px;
+      }
+      
+      .color-cards {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="index.html" aria-label="العودة إلى الصفحة الرئيسية">
+      <span>🌟</span>
+      <span>سمارت كيدز</span>
+    </a>
+    <nav class="nav-links" aria-label="روابط التنقل الأساسية">
+      <a href="index.html">الرئيسية</a>
+      <a href="stages.html">المراحل</a>
+      <a href="dashboard.html">لوحة التعلم</a>
+      <a href="games.html" class="active">الألعاب التعليمية</a>
+      <a href="books.html">المكتبة الرقمية</a>
+      <a href="stories.html">القصص الصوتية</a>
+      <a href="parent-report.html">لوحة ولي الأمر</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="game-hero">
+      <div class="game-header">
+        <span class="badge">🌈 Color Explorer</span>
+        <h1>Match the color with its English name</h1>
+        <p>
+          بطاقات تفاعلية بصور واضحة وصوت ناطق للكلمة الإنجليزية، تساعد طفلك على تعلّم الألوان الأربعة عشر الأكثر شيوعًا.
+        </p>
+
+        <div class="game-meta">
+          <div class="meta-item">📊 المستوى: 1</div>
+          <div class="meta-item">🎯 12 مهام تفاعلية</div>
+          <div class="meta-item">🔊 نطق واضح</div>
+        </div>
+
+        <div class="game-actions">
+          <button type="button" class="btn-primary" id="startGame">ابدأ اللعبة الآن 🚀</button>
+          <a class="btn-secondary" href="games.html">⬅ العودة إلى الألعاب</a>
+        </div>
+      </div>
+
+      <div class="game-sidebar">
+        <h2>تتبع التقدم</h2>
+        <div class="game-progress">
+          <div class="progress-item">
+            <dt>الألوان التي تم تعلمها</dt>
+            <dd id="learnedColors">0 / 12</dd>
+          </div>
+          <div class="progress-item">
+            <dt>التسلسل المثالي</dt>
+            <dd id="perfectSequence">0</dd>
+          </div>
+          <div class="progress-item">
+            <dt>تكرارات الصوت</dt>
+            <dd id="soundRepeats">0</dd>
+          </div>
+        </div>
+        <p class="card-note">أكمل جميع الألوان بمحاولة واحدة لفتح "شارة قوس قزح".</p>
+      </div>
+    </section>
+
+    <!-- منطقة اللعبة التفاعلية -->
+    <section class="game-area" id="gameArea">
+      <div class="game-header-area">
+        <div class="current-color">
+          <div class="color-sample" id="currentColorSample"></div>
+          <div class="color-name" id="currentColorName">اختر اللون</div>
+          <button class="sound-button" id="soundButton">🔊</button>
+        </div>
+        <div class="game-stats">
+          <div class="stat-item">
+            <div class="stat-value" id="score">0</div>
+            <div class="stat-label">النقاط</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="attempts">0</div>
+            <div class="stat-label">المحاولات</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="remaining">12</div>
+            <div class="stat-label">المتبقي</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="color-cards" id="colorCards">
+        <!-- سيتم إنشاء البطاقات ديناميكيًا -->
+      </div>
+
+      <div class="game-controls">
+        <button class="btn-secondary" id="resetGame">إعادة البدء</button>
+        <button class="btn-secondary" id="hintButton">طلب مساعدة</button>
+      </div>
+
+      <div class="completion-message" id="completionMessage">
+        <h2>🎉 مبروك! لقد أكملت جميع الألوان!</h2>
+        <div class="badge-earned">شارة قوس قزح</div>
+        <p>لقد تعلمت جميع الألوان الأساسية بنجاح. استمر في الممارسة لتحسين مهاراتك!</p>
+        <button class="btn-primary" id="playAgain">العب مرة أخرى</button>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-heading">
+        <span class="badge">تعليمات اللعبة</span>
+        <h2>كيف تلعب</h2>
+        <p>اتبع هذه الخطوات البسيطة للاستفادة القصوى من لعبة Color Explorer</p>
+      </div>
+
+      <div class="game-instructions">
+        <h2>طريقة اللعب</h2>
+        <ol>
+          <li>استمع لاسم اللون باللغة الإنجليزية مع النطق الصحيح.</li>
+          <li>اختر البطاقة التي تحمل اللون المطابق.</li>
+          <li>إن كان الاختيار صحيحًا، سيضيء اللون ويُسجَّل في لوحة التقدم.</li>
+          <li>واصل حتى تكمل جميع الألوان لتفتح نشاط "اختبر نفسك".</li>
+        </ol>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-heading">
+        <span class="badge">نتائج التعلم</span>
+        <h2>ما الذي سيتعلمه طفلك؟</h2>
+        <p>أهداف تعليمية واضحة ومحددة من هذه اللعبة التفاعلية</p>
+      </div>
+
+      <div class="game-outcomes">
+        <h2>مخرجات التعلم</h2>
+        <ul>
+          <li>تمييز اللون وربطه بالاسم الإنجليزي.</li>
+          <li>تحسين مهارة السمع والنطق من خلال التكرار.</li>
+          <li>توسيع المفردات اللغوية الأساسية.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-heading">
+        <span class="badge">أنشطة منزلية</span>
+        <h2>تمرّن في المنزل</h2>
+        <p>أنشطة إضافية لتعزيز التعلم خارج المنصة</p>
+      </div>
+
+      <div class="game-support">
+        <h2>تمرين منزلي</h2>
+        <p>
+          استخدم ألوانًا حقيقية (أقلام، قطع بناء) واطلب من طفلك تسمية كل لون باللغة الإنجليزية وتكوين جملة بسيطة باستخدامه.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    © <span id="year"></span> منصة سمارت كيدز التعليمية • صُمّمت لتجعل التعلم ممتعًا وآمنًا للأطفال في رياض الأطفال.
+  </footer>
+
+  <!-- زر المساعد الذكي -->
+  <div class="ai-assistant">
+    <button class="ai-button pulse">🤖</button>
+    <div class="ai-tooltip">اسألني عن أي شيء!</div>
+    
+    <!-- نافذة الدردشة -->
+    <div class="ai-chat">
+      <div class="chat-header">
+        <h3><span>🤖</span> المساعد الذكي</h3>
+        <button class="close-chat">×</button>
+      </div>
+      <div class="chat-body">
+        <div class="message ai-message">
+          مرحباً! أنا المساعد الذكي لسمارت كيدز. كيف يمكنني مساعدتك اليوم؟
+        </div>
+      </div>
+      <div class="chat-footer">
+        <input type="text" class="chat-input" placeholder="اكتب رسالتك هنا...">
+        <button class="send-button">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+    
+    // بيانات الألوان
+    const colors = [
+      { name: "Red", hex: "#FF5252", arabic: "أحمر" },
+      { name: "Blue", hex: "#448AFF", arabic: "أزرق" },
+      { name: "Green", hex: "#69F0AE", arabic: "أخضر" },
+      { name: "Yellow", hex: "#FFD740", arabic: "أصفر" },
+      { name: "Orange", hex: "#FFAB40", arabic: "برتقالي" },
+      { name: "Purple", hex: "#E040FB", arabic: "بنفسجي" },
+      { name: "Pink", hex: "#FF80AB", arabic: "وردي" },
+      { name: "Brown", hex: "#8D6E63", arabic: "بني" },
+      { name: "Black", hex: "#212121", arabic: "أسود" },
+      { name: "White", hex: "#F5F5F5", arabic: "أبيض" },
+      { name: "Gray", hex: "#9E9E9E", arabic: "رمادي" },
+      { name: "Cyan", hex: "#18FFFF", arabic: "سماوي" }
+    ];
+
+    // متغيرات اللعبة
+    let currentColor = null;
+    let score = 0;
+    let attempts = 0;
+    let remainingColors = colors.length;
+    let learnedColors = 0;
+    let perfectSequence = 0;
+    let soundRepeats = 0;
+    let currentStreak = 0;
+
+    // عناصر DOM
+    const gameArea = document.getElementById('gameArea');
+    const startGameBtn = document.getElementById('startGame');
+    const colorCardsContainer = document.getElementById('colorCards');
+    const currentColorSample = document.getElementById('currentColorSample');
+    const currentColorName = document.getElementById('currentColorName');
+    const soundButton = document.getElementById('soundButton');
+    const scoreElement = document.getElementById('score');
+    const attemptsElement = document.getElementById('attempts');
+    const remainingElement = document.getElementById('remaining');
+    const resetGameBtn = document.getElementById('resetGame');
+    const hintButton = document.getElementById('hintButton');
+    const completionMessage = document.getElementById('completionMessage');
+    const playAgainBtn = document.getElementById('playAgain');
+    const learnedColorsElement = document.getElementById('learnedColors');
+    const perfectSequenceElement = document.getElementById('perfectSequence');
+    const soundRepeatsElement = document.getElementById('soundRepeats');
+
+    // بدء اللعبة
+    startGameBtn.addEventListener('click', startGame);
+    resetGameBtn.addEventListener('click', resetGame);
+    playAgainBtn.addEventListener('click', resetGame);
+    soundButton.addEventListener('click', playCurrentColorSound);
+    hintButton.addEventListener('click', showHint);
+
+    // تهيئة اللعبة
+    function startGame() {
+      gameArea.classList.add('active');
+      resetGame();
+    }
+
+    // إعادة تعيين اللعبة
+    function resetGame() {
+      score = 0;
+      attempts = 0;
+      remainingColors = colors.length;
+      learnedColors = 0;
+      perfectSequence = 0;
+      soundRepeats = 0;
+      currentStreak = 0;
+      
+      updateStats();
+      generateColorCards();
+      selectRandomColor();
+      completionMessage.classList.remove('active');
+    }
+
+    // توليد بطاقات الألوان
+    function generateColorCards() {
+      colorCardsContainer.innerHTML = '';
+      
+      // خلط الألوان عشوائياً
+      const shuffledColors = [...colors].sort(() => Math.random() - 0.5);
+      
+      shuffledColors.forEach(color => {
+        const card = document.createElement('div');
+        card.className = 'color-card';
+        card.style.backgroundColor = color.hex;
+        card.dataset.color = color.name;
+        
+        const label = document.createElement('div');
+        label.className = 'color-label';
+        label.textContent = color.arabic;
+        
+        card.appendChild(label);
+        card.addEventListener('click', () => checkColor(color.name));
+        
+        colorCardsContainer.appendChild(card);
+      });
+    }
+
+    // اختيار لون عشوائي
+    function selectRandomColor() {
+      // اختيار لون عشوائي من الألوان المتبقية
+      const availableColors = colors.filter(color => !color.learned);
+      
+      if (availableColors.length === 0) {
+        endGame();
+        return;
+      }
+      
+      const randomIndex = Math.floor(Math.random() * availableColors.length);
+      currentColor = availableColors[randomIndex];
+      
+      currentColorSample.style.backgroundColor = currentColor.hex;
+      currentColorName.textContent = "ما هو هذا اللون؟";
+    }
+
+    // التحقق من اللون المختار
+    function checkColor(selectedColor) {
+      attempts++;
+      
+      const selectedCard = document.querySelector(`.color-card[data-color="${selectedColor}"]`);
+      
+      if (selectedColor === currentColor.name) {
+        // الإجابة صحيحة
+        selectedCard.classList.add('correct');
+        score += 10;
+        remainingColors--;
+        learnedColors++;
+        currentStreak++;
+        
+        if (currentStreak > perfectSequence) {
+          perfectSequence = currentStreak;
+        }
+        
+        // تعليم اللون كمتعلم
+        const colorObj = colors.find(color => color.name === currentColor.name);
+        colorObj.learned = true;
+        
+        setTimeout(() => {
+          selectedCard.classList.remove('correct');
+          selectRandomColor();
+        }, 1000);
+      } else {
+        // الإجابة خاطئة
+        selectedCard.classList.add('incorrect');
+        currentStreak = 0;
+        
+        setTimeout(() => {
+          selectedCard.classList.remove('incorrect');
+        }, 500);
+      }
+      
+      updateStats();
+    }
+
+    // تحديث الإحصائيات
+    function updateStats() {
+      scoreElement.textContent = score;
+      attemptsElement.textContent = attempts;
+      remainingElement.textContent = remainingColors;
+      learnedColorsElement.textContent = `${learnedColors} / ${colors.length}`;
+      perfectSequenceElement.textContent = perfectSequence;
+      soundRepeatsElement.textContent = soundRepeats;
+    }
+
+    // تشغيل صوت اللون الحالي
+    function playCurrentColorSound() {
+      if (!currentColor) return;
+      
+      // استخدام Web Speech API للنطق
+      const utterance = new SpeechSynthesisUtterance(currentColor.name);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.8;
+      speechSynthesis.speak(utterance);
+      
+      soundRepeats++;
+      updateStats();
+    }
+
+    // عرض تلميح
+    function showHint() {
+      if (!currentColor) return;
+      
+      // تسليط الضوء على البطاقة الصحيحة
+      const correctCard = document.querySelector(`.color-card[data-color="${currentColor.name}"]`);
+      correctCard.style.boxShadow = '0 0 0 3px #4CAF50';
+      
+      setTimeout(() => {
+        correctCard.style.boxShadow = '';
+      }, 2000);
+    }
+
+    // إنهاء اللعبة
+    function endGame() {
+      completionMessage.classList.add('active');
+    }
+
+    // تفعيل المساعد الذكي
+    const aiButton = document.querySelector('.ai-button');
+    const aiChat = document.querySelector('.ai-chat');
+    const closeChat = document.querySelector('.close-chat');
+    const sendButton = document.querySelector('.send-button');
+    const chatInput = document.querySelector('.chat-input');
+    const chatBody = document.querySelector('.chat-body');
+    
+    aiButton.addEventListener('click', () => {
+      aiChat.classList.toggle('active');
+    });
+    
+    closeChat.addEventListener('click', () => {
+      aiChat.classList.remove('active');
+    });
+    
+    function addMessage(text, isUser = false) {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('message');
+      messageDiv.classList.add(isUser ? 'user-message' : 'ai-message');
+      messageDiv.textContent = text;
+      chatBody.appendChild(messageDiv);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+    
+    sendButton.addEventListener('click', () => {
+      const message = chatInput.value.trim();
+      if (message) {
+        addMessage(message, true);
+        chatInput.value = '';
+        
+        // محاكاة رد المساعد
+        setTimeout(() => {
+          const responses = [
+            "هذا سؤال رائع! يمكنني مساعدتك في ذلك.",
+            "أفهم ما تقصده. دعني أقدم لك بعض المعلومات المفيدة.",
+            "شكراً لسؤالك! إليك الإجابة التي تبحث عنها.",
+            "أنا هنا لمساعدتك. هل تحتاج إلى مزيد من التفاصيل؟"
+          ];
+          const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+          addMessage(randomResponse);
+        }, 1000);
+      }
+    });
+    
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        sendButton.click();
+      }
+    });
+  </script>
+  <!-- زر العودة -->
+  <style>
+    .return-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, #e8822a, #ff9d45);
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 2px solid #ffb366;
+    }
+    
+    .return-button:hover {
+      background: linear-gradient(135deg, #ff9d45, #e8822a);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+    }
+    
+    .return-button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    @media (max-width: 768px) {
+      .return-button {
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+    }
+  </style>
+  <a href="javascript:history.back()" class="return-button">← عودة</a>
+  <script>
+    (function(){
+      function getFallbackUrl(){
+        const path = location.pathname.toLowerCase();
+        if (path.includes('game-arabic-letters') || path.includes('game-math-shape-lab') || path.includes('game-english-color-explorer')) {
+          return 'games-kg1.html';
+        }
+        if (path.includes('game-arabic-word-garden') || path.includes('game-math-number-race') || path.includes('game-english-word-trail')) {
+          return 'games-kg2.html';
+        }
+        if (path.includes('games-kg1')) return 'stages.html';
+        if (path.includes('games-kg2')) return 'stages.html';
+        if (path.includes('games.html')) return 'index.html';
+        if (path.includes('dashboard')) return 'stages.html';
+        if (path.includes('stages')) return 'index.html';
+        return 'index.html';
+      }
+      function handleBack(){
+        if (document.referrer && document.referrer !== location.href) {
+          window.history.back();
+        } else {
+          window.location.href = getFallbackUrl();
+        }
+      }
+      const btn=document.createElement('button');
+      btn.textContent='← رجوع';
+      btn.style.cssText='position:fixed;top:20px;left:20px;z-index:1000;background:linear-gradient(135deg,#e8822a,#ff9d45);color:#fff;border:none;padding:10px 16px;border-radius:12px;font-weight:700;font-family:Tajawal,sans-serif;box-shadow:0 4px 10px rgba(0,0,0,0.2);cursor:pointer;';
+      btn.addEventListener('click',handleBack);
+      document.addEventListener('DOMContentLoaded',function(){ document.body.appendChild(btn);});
+    })();
+  </script>
+</body>
+</html>

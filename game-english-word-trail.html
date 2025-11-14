@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Word Trail | سمارت كيدز</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="رتب الحروف لتكوين كلمات إنجليزية بسيطة، مع دعم صوتي وتشجيع مستمر." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="index.html" aria-label="العودة إلى الصفحة الرئيسية">
+      <span class="brand-icon" aria-hidden="true">🌟</span>
+      <span>سمارت كيدز</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-label="فتح القائمة" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" aria-label="روابط الموقع">
+      <a href="index.html">الرئيسية</a>
+      <a href="stages.html">المراحل</a>
+      <a href="dashboard.html">لوحة التعلم</a>
+      <a href="games.html" class="active" aria-current="page">الألعاب التعليمية</a>
+      <a href="books.html">المكتبة الرقمية</a>
+      <a href="stories.html">القصص الصوتية</a>
+      <a href="parent-report.html">لوحة ولي الأمر</a>
+    </nav>
+  </header>
+
+  <main class="page-wrapper game-detail-page">
+    <section class="game-detail-hero">
+      <div class="game-detail-header">
+        <span class="badge">🛤️ Word Trail</span>
+        <h1>Arrange the letters to build happy words</h1>
+        <p>
+          ساعد القطار على الوصول إلى محطته من خلال ترتيب الحروف لتكوين كلمات بسيطة، مع عرض توضيحي ورسوم متحركة لكل كلمة.
+        </p>
+        <div class="game-detail-meta">
+          <span>Level 2</span>
+          <span>عدد الكلمات: 15</span>
+          <span>نظام مكافآت</span>
+        </div>
+        <div class="game-detail-actions">
+          <button type="button" class="btn-primary">Start Word Trail</button>
+          <a class="btn-secondary" href="games.html">⬅ Back to Games Hub</a>
+        </div>
+      </div>
+      <aside class="game-detail-card">
+        <h2>Achievements</h2>
+        <dl>
+          <div><dt>Words mastered</dt><dd>0 / 15</dd></div>
+          <div><dt>Bonus stars</dt><dd>0</dd></div>
+          <div><dt>Attempts used</dt><dd>0</dd></div>
+        </dl>
+        <p class="card-note">احصل على 5 كلمات متتالية صحيحة لتحصل على وسام “Word Explorer”.</p>
+      </aside>
+    </section>
+
+    <section class="game-instructions">
+      <header>
+        <h2>Game steps</h2>
+      </header>
+      <ol>
+        <li>استمع للكلمة منطوقة بالإنجليزية وشاهد صورتها.</li>
+        <li>اسحب الحروف بترتيب صحيح لتكوين الكلمة.</li>
+        <li>استمع للنطق مرة أخرى ثم كرر بصوتك.</li>
+        <li>أكمل جميع الكلمات لفتح اختبار التهجئة النهائي.</li>
+      </ol>
+    </section>
+
+    <section class="game-tasks">
+      <header>
+        <h2>Focus skills</h2>
+      </header>
+      <ul>
+        <li>تعزيز مهارة التهجئة الإنجليزية للكلمات البسيطة.</li>
+        <li>تنمية الوعي الصوتي وربط الصوت بالحرف.</li>
+        <li>تقوية القدرة على ترتيب الأحداث (البداية، الوسط، النهاية).</li>
+      </ul>
+    </section>
+
+    <section class="game-support">
+      <header>
+        <h2>Home challenge</h2>
+      </header>
+      <p>
+        اصنع بطاقات حروف وألّف كلمات جديدة مع طفلك، واطلب منه كتابة كل كلمة في دفتر النشاط مع رسم بسيط يعبّر عنها.
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 Smart Kids – English made joyful.</p>
+  </footer>
+
+  <script>
+    const navToggle = document.querySelector(".nav-toggle");
+    const navLinks = document.querySelector(".nav-links");
+
+    if (navToggle) {
+      navToggle.addEventListener("click", () => {
+        const expanded = navToggle.getAttribute("aria-expanded") === "true";
+        navToggle.setAttribute("aria-expanded", !expanded);
+        navLinks.classList.toggle("is-open");
+      });
+    }
+  </script>
+  <!-- زر العودة -->
+  <style>
+    .return-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, #e8822a, #ff9d45);
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 2px solid #ffb366;
+    }
+    
+    .return-button:hover {
+      background: linear-gradient(135deg, #ff9d45, #e8822a);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+    }
+    
+    .return-button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    @media (max-width: 768px) {
+      .return-button {
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+    }
+  </style>
+  <a href="javascript:history.back()" class="return-button">← عودة</a>
+  <script>
+    (function(){
+      function getFallbackUrl(){
+        const path = location.pathname.toLowerCase();
+        if (path.includes('game-arabic-letters') || path.includes('game-math-shape-lab') || path.includes('game-english-color-explorer')) {
+          return 'games-kg1.html';
+        }
+        if (path.includes('game-arabic-word-garden') || path.includes('game-math-number-race') || path.includes('game-english-word-trail')) {
+          return 'games-kg2.html';
+        }
+        if (path.includes('games-kg1')) return 'stages.html';
+        if (path.includes('games-kg2')) return 'stages.html';
+        if (path.includes('games.html')) return 'index.html';
+        if (path.includes('dashboard')) return 'stages.html';
+        if (path.includes('stages')) return 'index.html';
+        return 'index.html';
+      }
+      function handleBack(){
+        if (document.referrer && document.referrer !== location.href) {
+          window.history.back();
+        } else {
+          window.location.href = getFallbackUrl();
+        }
+      }
+      const btn=document.createElement('button');
+      btn.textContent='← رجوع';
+      btn.style.cssText='position:fixed;top:20px;left:20px;z-index:1000;background:linear-gradient(135deg,#e8822a,#ff9d45);color:#fff;border:none;padding:10px 16px;border-radius:12px;font-weight:700;font-family:Tajawal,sans-serif;box-shadow:0 4px 10px rgba(0,0,0,0.2);cursor:pointer;';
+      btn.addEventListener('click',handleBack);
+      document.addEventListener('DOMContentLoaded',function(){ document.body.appendChild(btn);});
+    })();
+  </script>
+  <style>
+    .ai-assistant{position:fixed;bottom:30px;left:30px;z-index:1000}
+    .ai-button{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,#FF9E1F,#4A90E2);border:none;box-shadow:0 6px 20px rgba(0,0,0,0.2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#fff;transition:all .3s ease;position:relative;overflow:hidden}
+    .ai-button::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,rgba(255,255,255,.2),transparent);border-radius:50%}
+    .ai-button:hover{transform:scale(1.1) rotate(5deg);box-shadow:0 8px 25px rgba(0,0,0,0.3)}
+    .ai-button.pulse{animation:pulse 2s infinite}
+    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,158,31,.7)}70%{box-shadow:0 0 0 15px rgba(255,158,31,0)}100%{box-shadow:0 0 0 0 rgba(255,158,31,0)}}
+    .ai-tooltip{position:absolute;bottom:85px;left:0;background:#fff;color:#2D3748;padding:.8rem 1.2rem;border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,.12);width:200px;text-align:center;font-weight:500;opacity:0;visibility:hidden;transition:all .3s ease;transform:translateY(10px)}
+    .ai-button:hover + .ai-tooltip{opacity:1;visibility:visible;transform:translateY(0)}
+    .ai-chat{position:fixed;bottom:120px;left:30px;width:350px;height:450px;background:#fff;border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,.12);z-index:1001;display:none;flex-direction:column;overflow:hidden}
+    .ai-chat.active{display:flex}
+    .chat-header{background:linear-gradient(135deg,#FF9E1F,#4A90E2);color:#fff;padding:1rem;display:flex;align-items:center;justify-content:space-between}
+    .chat-header h3{margin:0;display:flex;align-items:center;gap:.5rem}
+    .close-chat{background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;transition:all .3s ease}
+    .close-chat:hover{transform:scale(1.2)}
+    .chat-body{flex:1;padding:1rem;overflow-y:auto;display:flex;flex-direction:column;gap:1rem}
+    .message{max-width:80%;padding:.8rem 1rem;border-radius:1.2rem;line-height:1.5}
+    .ai-message{background:#F7FAFC;color:#2D3748;align-self:flex-start;border-bottom-right-radius:.2rem}
+    .user-message{background:#FFD699;color:#2D3748;align-self:flex-end;border-bottom-left-radius:.2rem}
+    .chat-footer{padding:1rem;border-top:1px solid #E2E8F0;display:flex;gap:.5rem}
+    .chat-input{flex:1;padding:.8rem 1rem;border:1px solid #E2E8F0;border-radius:50px;font-family:inherit;outline:none;transition:all .3s ease}
+    .chat-input:focus{border-color:#FF9E1F}
+    .send-button{background:#FF9E1F;color:#fff;border:none;border-radius:50%;width:45px;height:45px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s ease}
+    .send-button:hover{background:#E88A0D;transform:scale(1.05)}
+  </style>
+  <div class="ai-assistant">
+    <button class="ai-button pulse">🤖</button>
+    <div class="ai-tooltip">اسألني عن أي شيء!</div>
+    <div class="ai-chat">
+      <div class="chat-header">
+        <h3><span>🤖</span> المساعد الذكي</h3>
+        <button class="close-chat">×</button>
+      </div>
+      <div class="chat-body">
+        <div class="message ai-message">مرحباً! أنا المساعد الذكي. كيف يمكنني مساعدتك اليوم؟</div>
+      </div>
+      <div class="chat-footer">
+        <input type="text" class="chat-input" placeholder="اكتب رسالتك هنا...">
+        <button class="send-button">➤</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function(){
+      const aiButton=document.querySelector('.ai-button');
+      const aiChat=document.querySelector('.ai-chat');
+      const closeChat=document.querySelector('.close-chat');
+      const sendButton=document.querySelector('.send-button');
+      const chatInput=document.querySelector('.chat-input');
+      const chatBody=document.querySelector('.chat-body');
+      function addMessage(text,isUser){const d=document.createElement('div');d.classList.add('message');d.classList.add(isUser?'user-message':'ai-message');d.textContent=text;chatBody.appendChild(d);chatBody.scrollTop=chatBody.scrollHeight;}
+      if(aiButton){aiButton.addEventListener('click',function(){aiChat.classList.toggle('active');});}
+      if(closeChat){closeChat.addEventListener('click',function(){aiChat.classList.remove('active');});}
+      if(sendButton){sendButton.addEventListener('click',function(){const m=chatInput.value.trim();if(m){addMessage(m,true);chatInput.value='';setTimeout(function(){var r=["هذا سؤال رائع!","أفهم ما تقصده.","شكراً لسؤالك!","هل تحتاج إلى مزيد من التفاصيل؟"];addMessage(r[Math.floor(Math.random()*r.length)]);},1000);}});} 
+      if(chatInput){chatInput.addEventListener('keypress',function(e){if(e.key==='Enter'){sendButton.click();}});} 
+    })();
+  </script>
+</body>
+</html>

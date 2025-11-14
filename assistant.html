@@ -1,0 +1,646 @@
+<!-- ======================================================
+     File: assistant.html
+     وصف: صفحة المساعد الذكي (Chatbot)
+     ====================================================== -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>سمارت كيدز | المساعد الذكي</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* نفس التصميم من index.html */
+    :root {
+      --primary: #FF9E1F;
+      --primary-dark: #E88A0D;
+      --primary-light: #FFD699;
+      --secondary: #4A90E2;
+      --secondary-light: #8EC0F0;
+      --accent: #FF6B6B;
+      --dark: #2D3748;
+      --light: #F7FAFC;
+      --white: #FFFFFF;
+      --gray-light: #E2E8F0;
+      --gray: #A0AEC0;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
+      --radius: 16px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background: var(--white);
+      border-radius: var(--radius);
+      margin: 1rem auto;
+      max-width: min(1200px, 94vw);
+      box-shadow: var(--shadow);
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 10px;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 700;
+      font-size: 1.4rem;
+    }
+
+    .brand span:first-child {
+      font-size: 2rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: var(--transition);
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+    }
+
+    main {
+      max-width: min(1200px, 94vw);
+      margin: 0 auto;
+      padding: 1.5rem 0;
+      flex: 1;
+    }
+
+    section {
+      margin-bottom: 4rem;
+    }
+
+    .card, .value-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .value-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .value-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(to left, var(--primary), var(--secondary));
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      align-self: flex-start;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-heading h2 {
+      font-size: 2.2rem;
+      margin: 1rem 0;
+      color: var(--dark);
+    }
+
+    .section-heading p {
+      max-width: 700px;
+      margin: 0 auto;
+      color: var(--dark);
+      opacity: 0.8;
+      font-size: 1.1rem;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--primary);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(255, 158, 31, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(255, 158, 31, 0.4);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--dark);
+      opacity: 0.7;
+      border-top: 1px solid var(--gray-light);
+      margin-top: 4rem;
+    }
+
+    /* تصميم نافذة الدردشة */
+    .chat-wrapper {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .chat-window {
+      height: 400px;
+      padding: 1.5rem;
+      overflow-y: auto;
+      border-bottom: 1px solid var(--gray-light);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 1rem 1.2rem;
+      border-radius: 1.2rem;
+      line-height: 1.5;
+      position: relative;
+    }
+
+    .ai-message {
+      background: var(--light);
+      color: var(--dark);
+      align-self: flex-start;
+      border-bottom-right-radius: 0.4rem;
+    }
+
+    .user-message {
+      background: var(--primary-light);
+      color: var(--dark);
+      align-self: flex-end;
+      border-bottom-left-radius: 0.4rem;
+    }
+
+    .quick-replies {
+      padding: 1.5rem;
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--gray-light);
+    }
+
+    .quick-reply {
+      background: var(--light);
+      color: var(--dark);
+      border: 1px solid var(--gray-light);
+      padding: 0.6rem 1.2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .quick-reply:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .chat-controls {
+      padding: 1.5rem;
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .chat-controls textarea {
+      flex: 1;
+      padding: 1rem 1.2rem;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--radius);
+      font-family: inherit;
+      outline: none;
+      transition: var(--transition);
+      resize: vertical;
+      min-height: 60px;
+      max-height: 120px;
+    }
+
+    .chat-controls textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 158, 31, 0.1);
+    }
+
+    /* تحسينات للاستجابة */
+    @media (max-width: 1024px) {
+      .nav-links {
+        gap: 0.3rem;
+      }
+      
+      .nav-links a {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.85rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+      }
+      
+      .nav-links {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      
+      .nav-links a {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.7rem;
+      }
+      
+      .section-heading h2 {
+        font-size: 1.8rem;
+      }
+      
+      .chat-window {
+        height: 300px;
+      }
+      
+      .quick-replies {
+        justify-content: center;
+      }
+      
+      .chat-controls {
+        flex-direction: column;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .nav-links {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .nav-links a {
+        width: 100%;
+        text-align: center;
+      }
+      
+      .message {
+        max-width: 90%;
+      }
+    }
+  </style>
+</head>
+  <body>
+  <button class="sidebar-toggle">☰ القائمة</button>
+  <div class="sidebar-overlay"></div>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>القائمة الرئيسية</h2>
+      <button class="sidebar-close">×</button>
+    </div>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="user-avatar">ط</div>
+      <div class="sidebar-user-info">
+        <h3 id="sidebar-student-name">اسم الطالب</h3>
+        <p id="sidebar-grade">المرحلة: رياض الأطفال</p>
+      </div>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="index.html">الصفحة الرئيسية</a></li>
+      <li><a href="stages.html">المراحل التعليمية</a></li>
+      <li><a href="dashboard-kg1.html">لوحة تعلم KG1</a></li>
+      <li><a href="dashboard-kg2.html">لوحة تعلم KG2</a></li>
+      <li><a href="games.html">الألعاب التعليمية</a></li>
+      <li><a href="books.html">المكتبة الرقمية</a></li>
+      <li><a href="stories.html">القصص الصوتية</a></li>
+      <li><a href="parent-report.html">لوحة ولي الأمر</a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logout-btn">
+        <span>تسجيل الخروج</span>
+        <span>🚪</span>
+      </button>
+    </div>
+  </div>
+  <header class="navbar">
+    <a class="brand" href="index.html" aria-label="العودة إلى الصفحة الرئيسية">
+      <span>🌟</span>
+      <span>سمارت كيدز</span>
+    </a>
+    <nav class="nav-links" aria-label="روابط التنقل الأساسية">
+      <a href="index.html">الرئيسية</a>
+      <a href="stages.html">المراحل</a>
+      <a href="dashboard.html">لوحة التعلم</a>
+      <a href="games.html">الألعاب التعليمية</a>
+      <a href="books.html">المكتبة الرقمية</a>
+      <a href="stories.html">القصص الصوتية</a>
+      <a href="parent-report.html">لوحة ولي الأمر</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="section-heading">
+      <span class="badge">المساعد الذكي</span>
+      <h2>💬 تحدث مع صديقك الذكي</h2>
+      <p>
+        اسأل عن الحروف والأرقام والألوان، أو اطلب منه نشاطًا ممتعًا تقوم به في المنزل.
+        المساعد الذكي يجيب على أسئلة طفلك بلغة عربية بسيطة وآمنة.
+      </p>
+    </section>
+
+    <section class="value-card">
+      <div class="chat-wrapper">
+        <div class="chat-window" data-chat-window>
+          <div class="message ai-message">
+            مرحباً! أنا المساعد الذكي لسمارت كيدز. كيف يمكنني مساعدتك اليوم؟ 
+            يمكنك سؤالي عن الحروف، الأرقام، الألوان، أو حتى طلب قصة قبل النوم! ✨
+          </div>
+        </div>
+        
+        <div class="quick-replies">
+          <button class="quick-reply" type="button" data-quick-reply="علمني حرفًا جديدًا">علمني حرفًا جديدًا</button>
+          <button class="quick-reply" type="button" data-quick-reply="كيف أنطق كلمة سمكة؟">كيف أنطق كلمة سمكة؟</button>
+          <button class="quick-reply" type="button" data-quick-reply="أريد لعبة عن الأرقام">أريد لعبة عن الأرقام</button>
+          <button class="quick-reply" type="button" data-quick-reply="أعطني قصة قبل النوم">أعطني قصة قبل النوم</button>
+          <button class="quick-reply" type="button" data-quick-reply="نصيحة لولي الأمر">نصيحة لولي الأمر</button>
+        </div>
+        
+        <form class="chat-controls" data-chat-form>
+          <textarea data-chat-input placeholder="اكتب سؤالك هنا..." required></textarea>
+          <button class="btn-primary" type="submit">إرسال السؤال ✨</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="section-heading">
+      <h3>كيف يمكن للمساعد الذكي مساعدة طفلك؟</h3>
+      <p>المساعد الذكي مصمم خصيصًا لدعم تعلم الأطفال بطريقة آمنة وممتعة</p>
+    </section>
+
+    <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+      <div class="value-card">
+        <h3>🔄 تعلم تفاعلي</h3>
+        <p>أسئلة وأجوبة تفاعلية تنمي فضول الطفل وتحفز التفكير النقدي</p>
+      </div>
+      
+      <div class="value-card">
+        <h3>🎯 نطق سليم</h3>
+        <p>يساعد الطفل على نطق الحروف والكلمات بشكل صحيح باللغة العربية الفصحى</p>
+      </div>
+      
+      <div class="value-card">
+        <h3>🧩 أنشطة ممتعة</h3>
+        <p>يقدم أنشطة وألعاب تعليمية يمكن ممارستها داخل المنزل وخارجه</p>
+      </div>
+      
+      <div class="value-card">
+        <h3>📚 قصص تعليمية</h3>
+        <p>يحكي قصصًا هادفة تنمي الخيال وتوسع المفردات اللغوية للطفل</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    فلنجعل التعلم رحلة حوارية ممتعة مع المساعد الذكي. 🤖
+    <br>
+    © <span id="year"></span> منصة سمارت كيدز التعليمية
+  </footer>
+
+  <script>
+    // تحديث السنة في التذييل
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // تفعيل الردود السريعة
+    const quickReplies = document.querySelectorAll('[data-quick-reply]');
+    const chatInput = document.querySelector('[data-chat-input]');
+    
+    quickReplies.forEach(button => {
+      button.addEventListener('click', () => {
+        chatInput.value = button.getAttribute('data-quick-reply');
+      });
+    });
+
+    // محاكاة الدردشة
+    const chatWindow = document.querySelector('[data-chat-window]');
+    const chatForm = document.querySelector('[data-chat-form]');
+    
+    // إجابات المساعد الذكي
+    const aiResponses = {
+      "علمني حرفًا جديدًا": "حسنًا! دعني أعلمك حرف 'ب'. هو حرف الباء، مثل كلمة 'بطة' و'بيت'. حاول أن ترسمه في الهواء وتقول: ب.. ب.. بطة! 🦆",
+      "كيف أنطق كلمة سمكة؟": "كلمة 'سمكة' تنطق هكذا: سـ-مـ-كـ-ة. جرب معي: ســمــكــة 🐟. أحسنت! السمكة تعيش في الماء وتسبح بزعانفها.",
+      "أريد لعبة عن الأرقام": "فكرة رائعة! هيا نلعب 'عد الأصابع'. أمسك 3 أصابع من يدك اليمنى و2 من اليسرى، كم أصبح المجموع؟ إذا قلت 5 فأنت ممتاز! 🎯",
+      "أعطني قصة قبل النوم": "في قديم الزمان، كان هناك أرنب صغير اسمه 'نونو'. كان نونو يحب الجزر كثيرًا... (هل تريدني أكمل القصة؟)",
+      "نصيحة لولي الأمر": "أهلاً ولي الأمر! نصيحتي لك: خصص 15 دقيقة يوميًا للقراءة مع طفلك. هذا يبني رابطًا عاطفيًا قويًا ويعزز حب التعلم لديه. 📚"
+    };
+    
+    // إضافة رسالة إلى النافذة
+    function addMessage(text, isUser = false) {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('message');
+      messageDiv.classList.add(isUser ? 'user-message' : 'ai-message');
+      messageDiv.textContent = text;
+      chatWindow.appendChild(messageDiv);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+    
+    // معالجة إرسال النموذج
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const message = chatInput.value.trim();
+      if (!message) return;
+      
+      // إضافة رسالة المستخدم
+      addMessage(message, true);
+      chatInput.value = '';
+      
+      // محاكاة كتابة المساعد
+      setTimeout(() => {
+        let response = aiResponses[message] || 
+          "شكرًا لسؤالك! يمكنني مساعدتك في تعلم الحروف، الأرقام، الألوان، أو حتى سرد قصة ممتعة. ماذا تريد أن تتعلم اليوم؟ 🌟";
+        
+        addMessage(response);
+      }, 1000);
+    });
+  </script>
+
+  <!-- زر العودة -->
+  <style>
+    .return-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, #e8822a, #ff9d45);
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 2px solid #ffb366;
+    }
+    
+    .return-button:hover {
+      background: linear-gradient(135deg, #ff9d45, #e8822a);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+    }
+    
+    .return-button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    @media (max-width: 768px) {
+      .return-button {
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+    }
+  </style>
+  <div class="ai-assistant">
+    <button class="ai-button pulse">🤖</button>
+    <div class="ai-tooltip">اسألني عن أي شيء!</div>
+    <div class="ai-chat">
+      <div class="chat-header">
+        <h3><span>🤖</span> المساعد الذكي</h3>
+        <button class="close-chat">×</button>
+      </div>
+      <div class="chat-body">
+        <div class="message ai-message">مرحباً! أنا المساعد الذكي. كيف يمكنني مساعدتك اليوم؟</div>
+      </div>
+      <div class="chat-footer">
+        <input type="text" class="chat-input" placeholder="اكتب رسالتك هنا...">
+        <button class="send-button">➤</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function(){
+      const aiButton=document.querySelector('.ai-button');
+      const aiChat=document.querySelector('.ai-chat');
+      const closeChat=document.querySelector('.close-chat');
+      const sendButton=document.querySelector('.send-button');
+      const chatInput=document.querySelector('.chat-input');
+      const chatBody=document.querySelector('.chat-body');
+      function addMessage(text,isUser){const d=document.createElement('div');d.classList.add('message');d.classList.add(isUser?'user-message':'ai-message');d.textContent=text;chatBody.appendChild(d);chatBody.scrollTop=chatBody.scrollHeight;}
+      if(aiButton){aiButton.addEventListener('click',function(){aiChat.classList.toggle('active');});}
+      if(closeChat){closeChat.addEventListener('click',function(){aiChat.classList.remove('active');});}
+      if(sendButton){sendButton.addEventListener('click',function(){const m=chatInput.value.trim();if(m){addMessage(m,true);chatInput.value='';setTimeout(function(){var r=["هذا سؤال رائع!","أفهم ما تقصده.","شكراً لسؤالك!","هل تحتاج إلى مزيد من التفاصيل؟"];addMessage(r[Math.floor(Math.random()*r.length)]);},1000);}});} 
+      if(chatInput){chatInput.addEventListener('keypress',function(e){if(e.key==='Enter'){sendButton.click();}});} 
+    })();
+  </script>
+  <a href="javascript:history.back()" class="return-button">← عودة</a>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const sidebarToggle = document.querySelector('.sidebar-toggle');
+      const sidebar = document.querySelector('.sidebar');
+      const sidebarOverlay = document.querySelector('.sidebar-overlay');
+      const sidebarClose = document.querySelector('.sidebar-close');
+      if (sidebarToggle && sidebar && sidebarOverlay) {
+        sidebarToggle.addEventListener('click', function() {
+          sidebar.classList.add('active');
+          sidebarOverlay.classList.add('active');
+        });
+      }
+      if (sidebarClose && sidebar && sidebarOverlay) {
+        sidebarClose.addEventListener('click', function() {
+          sidebar.classList.remove('active');
+          sidebarOverlay.classList.remove('active');
+        });
+      }
+      if (sidebarOverlay && sidebar) {
+        sidebarOverlay.addEventListener('click', function() {
+          sidebar.classList.remove('active');
+          sidebarOverlay.classList.remove('active');
+        });
+      }
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', function() {
+          if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
+            localStorage.removeItem('adukid_user');
+            window.location.href = 'index.html';
+          }
+        });
+      }
+      const current = location.pathname.split('/').pop().toLowerCase();
+      document.querySelectorAll('.sidebar-menu a').forEach(function(a){
+        const href = (a.getAttribute('href')||'').toLowerCase();
+        a.classList.toggle('active', href === current);
+      });
+    });
+  </script>
+
+</body>
+</html>

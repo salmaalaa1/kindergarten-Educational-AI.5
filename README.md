@@ -1,2 +1,2 @@
-# kindergarten-Educational-AI.5
+# kindergarten-Educational-AI.
 project for ISF

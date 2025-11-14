@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kindergarten Word Matching Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #a1c4fd 0%, #ffd1dc 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .title-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #ff6b8b;
+            font-size: 2.8rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .title-emoji {
+            font-size: 3rem;
+            animation: bounce 2s infinite;
+        }
+
+        .subtitle {
+            color: #5a67d8;
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+        }
+
+        .game-area {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .words-container, .pictures-container {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .word-item, .picture-item {
+            background-color: #ffd6e7;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #ff9ec0;
+        }
+
+        .word-item {
+            color: #ff4081;
+        }
+
+        .picture-item {
+            color: #5a67d8;
+        }
+
+        .word-item:hover, .picture-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .word-item.selected, .picture-item.selected {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 3px #5a67d8;
+        }
+
+        .word-item.correct, .picture-item.correct {
+            background-color: #a1c4fd;
+            border-color: #5a67d8;
+            animation: bounce 0.5s ease;
+        }
+
+        .word-item.incorrect, .picture-item.incorrect {
+            background-color: #ffcdd2;
+            border-color: #f44336;
+            animation: shake 0.5s ease;
+        }
+
+        .picture {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+
+        .message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px 40px;
+            border-radius: 15px;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            display: none;
+            animation: popIn 0.5s ease;
+        }
+
+        .success {
+            color: #4caf50;
+        }
+
+        .error {
+            color: #f44336;
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        button {
+            background-color: #7986cb;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #5c6bc0;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .line {
+            position: absolute;
+            background-color: #ff9800;
+            height: 5px;
+            transform-origin: 0 0;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .score {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #5a67d8;
+            font-weight: bold;
+        }
+
+        .level-indicator {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #ff6b8b;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .level-complete {
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            color: white;
+        }
+
+        .next-level {
+            background: linear-gradient(135deg, #ff9800, #ffb74d);
+            color: white;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        @keyframes popIn {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .game-area {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            
+            .words-container, .pictures-container {
+                width: 90%;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .title-emoji {
+                font-size: 2.5rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title-container">
+            <h1>Word Matching Game</h1>
+            <div class="title-emoji">🧩</div>
+        </div>
+        <p class="subtitle">Match the words with the correct pictures!</p>
+        
+        <div class="level-indicator">Level: <span id="level">1</span></div>
+        <div class="score">Matches: <span id="matches-count">0</span>/<span id="total-matches">5</span></div>
+        
+        <div class="game-area">
+            <div class="words-container" id="words-container">
+                <!-- Words will be inserted here by JavaScript -->
+            </div>
+            
+            <div class="pictures-container" id="pictures-container">
+                <!-- Pictures will be inserted here by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="new-game-btn">New Game</button>
+            <button id="next-level-btn" class="next-level" style="display: none;">Next Level</button>
+        </div>
+    </div>
+    
+    <div class="message" id="message"></div>
+
+    <script>
+        // Game data - words and corresponding image URLs
+        const gameData = [
+            // Level 1 - Simple words
+            [
+                { word: "apple", image: "🍎" },
+                { word: "cat", image: "🐱" },
+                { word: "sun", image: "☀️" },
+                { word: "car", image: "🚗" },
+                { word: "ball", image: "⚽" }
+            ],
+            // Level 2 - Slightly harder words
+            [
+                { word: "banana", image: "🍌" },
+                { word: "butterfly", image: "🦋" },
+                { word: "flower", image: "🌸" },
+                { word: "house", image: "🏠" },
+                { word: "tree", image: "🌳" }
+            ],
+            // Level 3 - Longer words
+            [
+                { word: "elephant", image: "🐘" },
+                { word: "giraffe", image: "🦒" },
+                { word: "rainbow", image: "🌈" },
+                { word: "umbrella", image: "☂️" },
+                { word: "butterfly", image: "🦋" }
+            ],
+            // Level 4 - More complex words
+            [
+                { word: "strawberry", image: "🍓" },
+                { word: "watermelon", image: "🍉" },
+                { word: "pineapple", image: "🍍" },
+                { word: "hamburger", image: "🍔" },
+                { word: "ice cream", image: "🍦" }
+            ],
+            // Level 5 - Challenging words
+            [
+                { word: "dinosaur", image: "🦕" },
+                { word: "helicopter", image: "🚁" },
+                { word: "volcano", image: "🌋" },
+                { word: "telescope", image: "🔭" },
+                { word: "microscope", image: "🔬" }
+            ]
+        ];
+
+        // DOM elements
+        const wordsContainer = document.getElementById('words-container');
+        const picturesContainer = document.getElementById('pictures-container');
+        const newGameBtn = document.getElementById('new-game-btn');
+        const nextLevelBtn = document.getElementById('next-level-btn');
+        const messageEl = document.getElementById('message');
+        const matchesCountEl = document.getElementById('matches-count');
+        const totalMatchesEl = document.getElementById('total-matches');
+        const levelEl = document.getElementById('level');
+
+        // Game state
+        let selectedWord = null;
+        let selectedPicture = null;
+        let matches = 0;
+        let correctPairs = [];
+        let currentLevel = 0;
+        let maxLevel = gameData.length - 1;
+
+        // Initialize the game
+        function initGame() {
+            // Reset game state
+            selectedWord = null;
+            selectedPicture = null;
+            matches = 0;
+            correctPairs = [];
+            currentLevel = 0;
+            
+            // Update UI
+            levelEl.textContent = currentLevel + 1;
+            matchesCountEl.textContent = matches;
+            totalMatchesEl.textContent = gameData[currentLevel].length;
+            
+            // Hide next level button
+            nextLevelBtn.style.display = 'none';
+            
+            // Start first level
+            startLevel();
+        }
+
+        // Start a new level
+        function startLevel() {
+            // Reset game state for level
+            selectedWord = null;
+            selectedPicture = null;
+            matches = 0;
+            correctPairs = [];
+            
+            // Update UI
+            levelEl.textContent = currentLevel + 1;
+            matchesCountEl.textContent = matches;
+            totalMatchesEl.textContent = gameData[currentLevel].length;
+            
+            // Clear containers
+            wordsContainer.innerHTML = '';
+            picturesContainer.innerHTML = '';
+            
+            // Shuffle the game data for current level
+            const shuffledData = [...gameData[currentLevel]].sort(() => Math.random() - 0.5);
+            
+            // Create word elements
+            shuffledData.forEach((item, index) => {
+                const wordEl = document.createElement('div');
+                wordEl.className = 'word-item';
+                wordEl.textContent = item.word;
+                wordEl.dataset.word = item.word;
+                wordEl.dataset.index = index;
+                wordEl.addEventListener('click', () => selectWord(wordEl));
+                wordsContainer.appendChild(wordEl);
+            });
+            
+            // Create picture elements
+            shuffledData.forEach((item, index) => {
+                const pictureEl = document.createElement('div');
+                pictureEl.className = 'picture-item';
+                pictureEl.innerHTML = `<span style="font-size: 60px;">${item.image}</span>`;
+                pictureEl.dataset.word = item.word;
+                pictureEl.dataset.index = index;
+                pictureEl.addEventListener('click', () => selectPicture(pictureEl));
+                picturesContainer.appendChild(pictureEl);
+            });
+            
+            // Show level message
+            showMessage(`Level ${currentLevel + 1}`, 'success');
+        }
+
+        // Handle word selection
+        function selectWord(wordEl) {
+            // If already matched, do nothing
+            if (wordEl.classList.contains('correct')) return;
+            
+            // Deselect previous selection
+            if (selectedWord) {
+                selectedWord.classList.remove('selected');
+            }
+            
+            // Select new word
+            wordEl.classList.add('selected');
+            selectedWord = wordEl;
+            
+            // Check if we have both a word and a picture selected
+            checkMatch();
+        }
+
+        // Handle picture selection
+        function selectPicture(pictureEl) {
+            // If already matched, do nothing
+            if (pictureEl.classList.contains('correct')) return;
+            
+            // Deselect previous selection
+            if (selectedPicture) {
+                selectedPicture.classList.remove('selected');
+            }
+            
+            // Select new picture
+            pictureEl.classList.add('selected');
+            selectedPicture = pictureEl;
+            
+            // Check if we have both a word and a picture selected
+            checkMatch();
+        }
+
+        // Check if selected word and picture match
+        function checkMatch() {
+            if (selectedWord && selectedPicture) {
+                const word = selectedWord.dataset.word;
+                const pictureWord = selectedPicture.dataset.word;
+                
+                if (word === pictureWord) {
+                    // Correct match
+                    selectedWord.classList.add('correct');
+                    selectedPicture.classList.add('correct');
+                    
+                    // Add to correct pairs
+                    correctPairs.push({
+                        word: selectedWord,
+                        picture: selectedPicture
+                    });
+                    
+                    // Update matches count
+                    matches++;
+                    matchesCountEl.textContent = matches;
+                    
+                    // Show success message
+                    showMessage('Well done! 🎉', 'success');
+                    
+                    // Check if level is complete
+                    if (matches === gameData[currentLevel].length) {
+                        setTimeout(() => {
+                            if (currentLevel < maxLevel) {
+                                showMessage(`Level ${currentLevel + 1} Complete!`, 'success');
+                                nextLevelBtn.style.display = 'block';
+                            } else {
+                                showMessage('You completed all levels! 🏆', 'success');
+                            }
+                        }, 1000);
+                    }
+                } else {
+                    // Incorrect match
+                    selectedWord.classList.add('incorrect');
+                    selectedPicture.classList.add('incorrect');
+                    
+                    // Show error message
+                    showMessage('Try again! ❌', 'error');
+                    
+                    // Reset after a delay
+                    setTimeout(() => {
+                        selectedWord.classList.remove('selected', 'incorrect');
+                        selectedPicture.classList.remove('selected', 'incorrect');
+                    }, 1000);
+                }
+                
+                // Reset selections
+                selectedWord = null;
+                selectedPicture = null;
+            }
+        }
+
+        // Show message
+        function showMessage(text, type) {
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+            
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 1500);   
+        }
+
+        // Go to next level
+        function nextLevel() {
+            currentLevel++;
+            nextLevelBtn.style.display = 'none';
+            startLevel();
+        }
+
+        // Event listeners
+        newGameBtn.addEventListener('click', initGame);
+        nextLevelBtn.addEventListener('click', nextLevel);
+
+        // Initialize the game when page loads
+        window.addEventListener('DOMContentLoaded', initGame);
+    </script>
+    <style>
+      .ai-assistant{position:fixed;bottom:30px;left:30px;z-index:1000}
+      .ai-button{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,#FF9E1F,#4A90E2);border:none;box-shadow:0 6px 20px rgba(0,0,0,0.2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#fff;transition:all .3s ease;position:relative;overflow:hidden}
+      .ai-button::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,rgba(255,255,255,.2),transparent);border-radius:50%}
+      .ai-button:hover{transform:scale(1.1) rotate(5deg);box-shadow:0 8px 25px rgba(0,0,0,0.3)}
+      .ai-button.pulse{animation:pulse 2s infinite}
+      @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,158,31,.7)}70%{box-shadow:0 0 0 15px rgba(255,158,31,0)}100%{box-shadow:0 0 0 0 rgba(255,158,31,0)}}
+      .ai-tooltip{position:absolute;bottom:85px;left:0;background:#fff;color:#2D3748;padding:.8rem 1.2rem;border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,.12);width:200px;text-align:center;font-weight:500;opacity:0;visibility:hidden;transition:all .3s ease;transform:translateY(10px)}
+      .ai-button:hover + .ai-tooltip{opacity:1;visibility:visible;transform:translateY(0)}
+      .ai-chat{position:fixed;bottom:120px;left:30px;width:350px;height:450px;background:#fff;border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,.12);z-index:1001;display:none;flex-direction:column;overflow:hidden}
+      .ai-chat.active{display:flex}
+      .chat-header{background:linear-gradient(135deg,#FF9E1F,#4A90E2);color:#fff;padding:1rem;display:flex;align-items:center;justify-content:space-between}
+      .chat-header h3{margin:0;display:flex;align-items:center;gap:.5rem}
+      .close-chat{background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;transition:all .3s ease}
+      .close-chat:hover{transform:scale(1.2)}
+      .chat-body{flex:1;padding:1rem;overflow-y:auto;display:flex;flex-direction:column;gap:1rem}
+      .message{max-width:80%;padding:.8rem 1rem;border-radius:1.2rem;line-height:1.5}
+      .ai-message{background:#F7FAFC;color:#2D3748;align-self:flex-start;border-bottom-right-radius:.2rem}
+      .user-message{background:#FFD699;color:#2D3748;align-self:flex-end;border-bottom-left-radius:.2rem}
+      .chat-footer{padding:1rem;border-top:1px solid #E2E8F0;display:flex;gap:.5rem}
+      .chat-input{flex:1;padding:.8rem 1rem;border:1px solid #E2E8F0;border-radius:50px;font-family:inherit;outline:none;transition:all .3s ease}
+      .chat-input:focus{border-color:#FF9E1F}
+      .send-button{background:#FF9E1F;color:#fff;border:none;border-radius:50%;width:45px;height:45px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s ease}
+      .send-button:hover{background:#E88A0D;transform:scale(1.05)}
+    </style>
+    <div class="ai-assistant">
+      <button class="ai-button pulse">🤖</button>
+      <div class="ai-tooltip">Ask me anything!</div>
+      <div class="ai-chat">
+        <div class="chat-header">
+          <h3><span>🤖</span> Smart Assistant</h3>
+          <button class="close-chat">×</button>
+        </div>
+        <div class="chat-body">
+          <div class="message ai-message">Hi! I'm the assistant. How can I help?</div>
+        </div>
+        <div class="chat-footer">
+          <input type="text" class="chat-input" placeholder="Type your message...">
+          <button class="send-button">➤</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function(){
+        const aiButton=document.querySelector('.ai-button');
+        const aiChat=document.querySelector('.ai-chat');
+        const closeChat=document.querySelector('.close-chat');
+        const sendButton=document.querySelector('.send-button');
+        const chatInput=document.querySelector('.chat-input');
+        const chatBody=document.querySelector('.chat-body');
+        function addMessage(text,isUser){const d=document.createElement('div');d.classList.add('message');d.classList.add(isUser?'user-message':'ai-message');d.textContent=text;chatBody.appendChild(d);chatBody.scrollTop=chatBody.scrollHeight;}
+        if(aiButton){aiButton.addEventListener('click',function(){aiChat.classList.toggle('active');});}
+        if(closeChat){closeChat.addEventListener('click',function(){aiChat.classList.remove('active');});}
+        if(sendButton){sendButton.addEventListener('click',function(){const m=chatInput.value.trim();if(m){addMessage(m,true);chatInput.value='';setTimeout(function(){var r=["Great question!","I see what you mean.","Thanks for asking!","Need more details?"];addMessage(r[Math.floor(Math.random()*r.length)]);},1000);}});} 
+        if(chatInput){chatInput.addEventListener('keypress',function(e){if(e.key==='Enter'){sendButton.click();}});} 
+      })();
+    </script>
+    <style>
+      .return-button{position:fixed;bottom:30px;right:30px;background:linear-gradient(135deg,#e8822a,#ff9d45);color:#fff;padding:12px 30px;border:none;border-radius:50px;font-size:16px;font-weight:bold;text-decoration:none;cursor:pointer;transition:all .3s ease;box-shadow:0 4px 6px rgba(0,0,0,0.1);z-index:1000;display:flex;align-items:center;gap:.5rem;border:2px solid #ffb366}
+      .return-button:hover{background:linear-gradient(135deg,#ff9d45,#e8822a);transform:translateY(-2px) scale(1.05);box-shadow:0 6px 8px rgba(0,0,0,0.15)}
+      .return-button:active{transform:translateY(0);box-shadow:0 2px 4px rgba(0,0,0,0.1)}
+    </style>
+    <a href="javascript:history.back()" class="return-button">← Back</a>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html>

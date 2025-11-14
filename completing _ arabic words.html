@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kindergarten Word Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(135deg, #ffccd5, #c9f5ff);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: white;
+            border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #ff6b8b;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0 #ffe259;
+        }
+
+        .subtitle {
+            color: #5a9bff;
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+        }
+
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .word-container {
+            font-size: 3.5rem;
+            font-weight: bold;
+            letter-spacing: 8px;
+            color: #333;
+            margin: 10px 0;
+            font-family: 'Fredoka One', cursive;
+            background-color: #e6f7ff; /* Light blue background */
+            padding: 15px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .missing-letter {
+            color: #ff6b8b;
+            text-decoration: underline;
+            position: relative;
+        }
+
+        .emoji-hint {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+            z-index: 10;
+        }
+
+        .letters-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            max-width: 600px;
+            margin: 20px 0;
+        }
+
+        .letter {
+            width: 60px;
+            height: 60px;
+            background-color: #b3e0ff; /* Light blue color */
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 0 #66c2ff;
+            color: #333;
+            user-select: none;
+        }
+
+        .letter:hover {
+            transform: translateY(-3px);
+            background-color: #99d6ff;
+        }
+
+        .letter:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #66c2ff;
+        }
+
+        .message {
+            font-size: 1.5rem;
+            font-weight: bold;
+            min-height: 40px;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .correct {
+            color: #28a745;
+            background-color: #d4edda;
+        }
+
+        .wrong {
+            color: #dc3545;
+            background-color: #f8d7da;
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-family: 'Comic Neue', cursive;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .new-game {
+            background-color: #5a9bff;
+            color: white;
+        }
+
+        .show-answer {
+            background-color: #ff9e7d;
+            color: white;
+        }
+
+        .score {
+            font-size: 1.3rem;
+            margin-top: 20px;
+            color: #5a9bff;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .word-container {
+                font-size: 2.5rem;
+                letter-spacing: 5px;
+            }
+            
+            .letter {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .emoji-hint {
+                font-size: 2rem;
+                top: -40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Word Fun!</h1>
+        <p class="subtitle">Find the missing letter to complete the word!</p>
+        
+        <div class="game-area">
+            <div class="word-container" id="word-display">
+                <!-- Word with missing letter will appear here -->
+            </div>
+            
+            <div class="letters-container" id="letters-container">
+                <!-- Only 6 letters will be generated here -->
+            </div>
+            
+            <div class="message" id="message">
+                <!-- Correct/Wrong messages will appear here -->
+            </div>
+            
+            <div class="score" id="score">
+                Score: <span id="score-value">0</span>
+            </div>
+            
+            <div class="buttons-container">
+                <button class="new-game" id="new-game">New Game</button>
+                <button class="show-answer" id="show-answer">Show Answer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Word database with emojis
+        const words = [
+            { word: "apple", emoji: "🍎", missingIndex: 0 },
+            { word: "ball", emoji: "⚽", missingIndex: 1 },
+            { word: "cat", emoji: "🐱", missingIndex: 1 },
+            { word: "dog", emoji: "🐶", missingIndex: 2 },
+            { word: "egg", emoji: "🥚", missingIndex: 0 },
+            { word: "fish", emoji: "🐠", missingIndex: 0 },
+            { word: "gift", emoji: "🎁", missingIndex: 1 },
+            { word: "hat", emoji: "🧢", missingIndex: 0 },
+            { word: "ice", emoji: "🧊", missingIndex: 0 },
+            { word: "juice", emoji: "🧃", missingIndex: 1 },
+            { word: "kite", emoji: "🪁", missingIndex: 0 },
+            { word: "lion", emoji: "🦁", missingIndex: 1 },
+            { word: "moon", emoji: "🌙", missingIndex: 0 },
+            { word: "nest", emoji: "🪺", missingIndex: 1 },
+            { word: "orange", emoji: "🍊", missingIndex: 0 },
+            { word: "pig", emoji: "🐷", missingIndex: 1 },
+            { word: "queen", emoji: "👑", missingIndex: 0 },
+            { word: "rain", emoji: "🌧️", missingIndex: 1 },
+            { word: "sun", emoji: "☀️", missingIndex: 1 },
+            { word: "tree", emoji: "🌳", missingIndex: 2 },
+            { word: "umbrella", emoji: "☂️", missingIndex: 0 },
+            { word: "van", emoji: "🚐", missingIndex: 1 },
+            { word: "water", emoji: "💧", missingIndex: 0 },
+            { word: "xray", emoji: "🩻", missingIndex: 0 },
+            { word: "yoyo", emoji: "🪀", missingIndex: 0 },
+            { word: "zebra", emoji: "🦓", missingIndex: 0 }
+        ];
+
+        // Game state
+        let currentWord = null;
+        let score = 0;
+        let gameActive = true;
+
+        // DOM elements
+        const wordDisplay = document.getElementById('word-display');
+        const lettersContainer = document.getElementById('letters-container');
+        const messageElement = document.getElementById('message');
+        const scoreElement = document.getElementById('score-value');
+        const newGameButton = document.getElementById('new-game');
+        const showAnswerButton = document.getElementById('show-answer');
+
+        // Initialize the game
+        function initGame() {
+            // Select a random word
+            currentWord = words[Math.floor(Math.random() * words.length)];
+            
+            // Display the word with missing letter and emoji
+            displayWordWithMissingLetter();
+            
+            // Generate only 6 letter buttons
+            generateLetterButtons();
+            
+            // Reset message
+            messageElement.textContent = '';
+            messageElement.className = 'message';
+            
+            // Enable game
+            gameActive = true;
+        }
+
+        // Display word with missing letter and emoji above it
+        function displayWordWithMissingLetter() {
+            const wordArray = currentWord.word.split('');
+            wordArray[currentWord.missingIndex] = '_';
+            
+            let displayHTML = '';
+            for (let i = 0; i < wordArray.length; i++) {
+                if (i === currentWord.missingIndex) {
+                    displayHTML += `<span class="missing-letter">${wordArray[i]}<span class="emoji-hint">${currentWord.emoji}</span></span>`;
+                } else {
+                    displayHTML += wordArray[i];
+                }
+            }
+            
+            wordDisplay.innerHTML = displayHTML;
+        }
+
+        // Generate only 6 letter buttons including the correct one
+        function generateLetterButtons() {
+            lettersContainer.innerHTML = '';
+            
+            const correctLetter = currentWord.word[currentWord.missingIndex].toUpperCase();
+            const letters = [correctLetter];
+            
+            // Add 5 random wrong letters
+            while (letters.length < 6) {
+                const randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+                if (!letters.includes(randomLetter)) {
+                    letters.push(randomLetter);
+                }
+            }
+            
+            // Shuffle the letters
+            for (let i = letters.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [letters[i], letters[j]] = [letters[j], letters[i]];
+            }
+            
+            // Create letter buttons
+            letters.forEach(letter => {
+                const letterElement = document.createElement('div');
+                letterElement.className = 'letter';
+                letterElement.textContent = letter;
+                letterElement.addEventListener('click', () => handleLetterClick(letter));
+                lettersContainer.appendChild(letterElement);
+            });
+        }
+
+        // Handle letter click
+        function handleLetterClick(letter) {
+            if (!gameActive) return;
+            
+            const correctLetter = currentWord.word[currentWord.missingIndex].toUpperCase();
+            
+            if (letter === correctLetter) {
+                // Correct answer
+                messageElement.textContent = 'Well done — Correct answer! ✅';
+                messageElement.className = 'message correct';
+                score += 10;
+                scoreElement.textContent = score;
+                gameActive = false;
+                
+                // Reveal the complete word
+                wordDisplay.textContent = currentWord.word;
+            } else {
+                // Wrong answer
+                messageElement.textContent = 'Wrong answer — Try again! ❌';
+                messageElement.className = 'message wrong';
+                
+                // Small penalty for wrong answers
+                if (score > 0) score -= 1;
+                scoreElement.textContent = score;
+            }
+        }
+
+        // Show answer
+        function showAnswer() {
+            if (!gameActive) return;
+            
+            messageElement.textContent = `The answer is: ${currentWord.word}`;
+            messageElement.className = 'message correct';
+            wordDisplay.textContent = currentWord.word;
+            gameActive = false;
+            
+            // Small penalty for using show answer
+            if (score > 0) score -= 5;
+            scoreElement.textContent = score;
+        }
+
+        // Event listeners
+        newGameButton.addEventListener('click', initGame);
+        showAnswerButton.addEventListener('click', showAnswer);
+
+        // Start the game
+        initGame();
+    </script>
+</body>
+</html>
